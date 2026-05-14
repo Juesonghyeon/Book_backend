@@ -7,6 +7,7 @@ import co.books.api.book.dto.BooksMainData;
 import co.books.api.book.dto.BooksReviewItem;
 import co.books.api.book.dto.BooksTopNItem;
 import co.books.api.book.dto.PageInfo;
+import co.books.api.book.dto.SelectBookItem;
 import co.books.api.book.entity.BookEntity;
 import co.books.api.book.repo.BookRepository;
 import co.books.api.review.repo.ReviewRepository;
@@ -121,6 +122,23 @@ public class BooksService {
                 .toList();
 
         return BooksListApiResponse.ok(items, new PageInfo(page, result.getTotalElements()));
+    }
+
+    /**
+     * bookId 목록에 해당하는 도서 정보 반환.
+     * 존재하지 않는 bookId 는 결과에서 제외된다.
+     */
+    public List<SelectBookItem> getSelectedBooks(List<String> bookIds) {
+        return bookRepository.findAllById(bookIds)
+                .stream()
+                .map(b -> new SelectBookItem(
+                        b.getBookId(),
+                        b.getTitle(),
+                        b.getOriginalPrice(),
+                        b.getSalePrice(),
+                        b.getImageUrl()
+                ))
+                .toList();
     }
 
     private BooksTopNItem toTopNItem(BookEntity book) {

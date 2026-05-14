@@ -5,6 +5,7 @@ import co.books.api.book.dto.BooksApiResponse;
 import co.books.api.book.dto.BooksDetailData;
 import co.books.api.book.dto.BooksListApiResponse;
 import co.books.api.book.dto.BooksMainData;
+import co.books.api.book.dto.SelectBookItem;
 import co.books.api.book.service.BooksService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,12 +15,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/books")
 @RequiredArgsConstructor
 public class BooksController {
 
     private final BooksService booksService;
+
+    /**
+     * 선택된 도서 정보 조회.
+     * order-books 파라메터를 콤마(,) 기준으로 분리한 bookId 목록에 해당하는
+     * 도서 제목, 원가격, 할인가격, 이미지를 반환한다.
+     */
+    @GetMapping(params = "order-books")
+    public ResponseEntity<BooksApiResponse<List<SelectBookItem>>> getSelectedBooks(
+            @RequestParam("order-books") String orderBooks) {
+        List<String> bookIds = Arrays.stream(orderBooks.split(","))
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+        return ResponseEntity.ok(BooksApiResponse.ok(booksService.getSelectedBooks(bookIds)));
+    }
 
     /**
      * 도서 리스트 조회.

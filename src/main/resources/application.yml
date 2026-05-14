@@ -16,7 +16,7 @@ spring:
 
   # PostgreSQL 데이터소스 설정
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
+    url: jdbc:postgresql://database-1.crwckm2kc7oy.ap-southeast-2.rds.amazonaws.com:5432/postgres
     username: postgres
     password: 1234qwer!
     driver-class-name: org.postgresql.Driver
@@ -30,7 +30,7 @@ spring:
   jpa:
     hibernate:
       # 운영 엔티티 스키마와 실제 DB 스키마가 일치하는지만 검증 (DDL 자동 변경 없음)
-      ddl-auto: validate
+      ddl-auto: update
     show-sql: true
     properties:
       hibernate:
@@ -58,3 +58,7 @@ jwt:
   access-token-validity: 1800000
   # JWT 발급자 식별자
   issuer: books-api
+
+portone:
+  api-base-url: https://api.portone.io
+  api-secret: YGTY4u1cGIPjt0huzDacTRU7SNdnZaJpCtIXmjl9M6nzNubxs4xhkSNv8uOsQm0jr9gaYGqYh6yjjlbz
